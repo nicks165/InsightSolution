@@ -4,8 +4,7 @@ Word counter and Median generator
 Language : C++
 Developed and test using g++ on Suse Linux  
 
-This repo contains the classes and sample input/output files to parse a set of input files in directory (e.g. "wc_input") and output
-two result files in the output directory (e.g. "wc_output") -
+This repo contains the classes and sample input/output files to parse a set of input files in directory (e.g. "wc_input") and output two result files in the output directory (e.g. "wc_output") -
 1) wc_result.txt : Contains alphabatically sorted word to number of occurences per line.
 2) med_result.txt : Contains the running median of the number of words per line in all the files in the input directory when 
 parsed in alphabetical order.
@@ -37,16 +36,12 @@ The tokeized words are then sent to a counter to maintains a ordered map of the 
 Tradeoffs - 
 I optimzed for memory over processing time since this solution is supposed to run on a single machine. The ideal solution would 
 have been to have multiple threads reading data from different files (total files divided among the number of threads) and 
-tokenzing them independently and sending them over to the consumer threads which would would each maintain a map of words to number
-of occurences. In order to facililate easy reduction, the trick would be to ensure that each word always goes to the same consumer thread.
+tokenzing them independently and sending them over to the consumer threads which would would each maintain a map of words to number of occurences. In order to facililate easy reduction, the trick would be to ensure that each word always goes to the same consumer thread.
 After all the data has been read, a reduce thread would collate all the maps from invidual threads and write them to file.
-This design becomes more expensive in the single server instance because of the need to maintain multiple maps and one large collated map
-leading to more memory consumption (double the normal). Also, the merge of individual consumer map would have to be smart enough to  either
-maintain the sort order (by assigning buckets of alphabets (become more complex to support unicode chars) to each thread and then iterate throug in order)  or sort them  after merge.
+This design becomes more expensive in the single server instance because of the need to maintain multiple maps and one large collated map leading to more memory consumption (double the normal). Also, the merge of individual consumer map would have to be smart enough to  either maintain the sort order (by assigning buckets of alphabets (become more complex to support unicode chars) to each thread and then iterate throug in order)  or sort them  after merge.
 
 Hence, i opted to optimize for memory and simplicity, with a modular code allowing for easy refactor to a distributed scenario.
-We maintian just one ordered map and iterate through the files a line at once. Have testing it on input of multiple 25GB files,
-which it supports easily. since, the total number of words hardly reaches millions.
+I maintian just one ordered map and iterate through the files a line at once. Have testing it on input of multiple 25GB files, which it supports easily. since, the total number of words hardly reaches millions.
 
 Running Median:
 The my_running_median.cpp is the main entry point for calculating running median. I first capture all the files in the directory and then sort them alphabetically uppercase and then lower case. 
