@@ -60,3 +60,5 @@ I calculate the median using a min heap and max heap.
 I use Max heap to represent elements that are less than running median, and a min heap to represent elements that are greater than running median.
 
 After processing an incoming element, the number of elements in heaps differ utmost by 1 element. When both heaps contain same number of elements, i pick average of heap's root data as effective median. When the heaps are not balanced, i select effective median from the root of heap containing more elements.
+
+The running median is directly streamed into outfile.
